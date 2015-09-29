@@ -24,7 +24,7 @@ import scipy.sparse as sp
 from scipy.spatial.distance import cdist, pdist, squareform
 
 from sklearn.metrics import pairwise_distances
-from sklearn.utils import check_random_state, atleast2d_or_csr
+from sklearn.utils import check_random_state, check_array
 from sklearn.utils.extmath import safe_sparse_dot
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -108,7 +108,7 @@ class BaseRandomLayer(BaseEstimator, TransformerMixin):
         -------
         self
         """
-        X = atleast2d_or_csr(X)
+        X = check_array(X)
 
         self._generate_components(X)
 
@@ -130,7 +130,7 @@ class BaseRandomLayer(BaseEstimator, TransformerMixin):
         -------
         X_new : numpy array of shape [n_samples, n_components]
         """
-        X = atleast2d_or_csr(X)
+        X = check_array(X)
 
         if (self.components_ is None):
             raise ValueError('No components initialized')
@@ -192,7 +192,7 @@ class RandomLayer(BaseRandomLayer):
 
         It must be one of 'tanh', 'sine', 'tribas', 'inv_tribas',
         'sigmoid', 'hardlim', 'softlim', 'gaussian', 'multiquadric',
-        'inv_multiquadric', 'reclinear' or a callable.  If None is given, 
+        'inv_multiquadric', 'reclinear' or a callable.  If None is given,
         'tanh' will be used.
 
         If a callable is given, it will be used to compute the activations.
@@ -240,7 +240,7 @@ class RandomLayer(BaseRandomLayer):
     # inverse multiquadric RBF
     _inv_multiquadric = (lambda x:
                          1.0/(np.sqrt(1.0 + pow(x, 2.0))))
-                         
+
     # rectified linear: max(0, x)
     _reclinear = (lambda x: np.maximum(0, x))
 
